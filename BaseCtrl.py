@@ -56,9 +56,9 @@ def do_admin_login():
 
 @app.route('/teamplayer', methods=['POST'])
 def add_team_player():
-    if request.form['add_template'] == 'Add Team':
+    if request.form['add_team_play'] == 'Add Team':
         return render_template('addteam.html')
-    elif request.form['add_template'] == 'Add Player':
+    elif request.form['add_team_play'] == 'Add Player':
         teams = get_team()
         return render_template('addplayer.html', teams=teams)
     else:
@@ -68,9 +68,10 @@ def add_team_player():
 def add_team():
     if request.method == 'POST':
         result = request.form
+        teamImage = request.files['teamImage'].read()
         team = Team.query.filter_by(team_name=result['team_name']).first()
         if not team:
-            team1 = Team(team_name=result['team_name'])
+            team1 = Team(team_name=result['team_name'], team_image=teamImage)
             db.session.add(team1)
             db.session.commit()
             flash(result['team_name'] + ' is added successfully')
@@ -85,7 +86,9 @@ def add_team():
 def player_information():
     if request.method == 'POST':
         result = request.form
-        player = Player(player_fname=result['player_first_name'], player_lname=result['player_last_name'], team_id=result['team_selected'])
+        playerImage = request.files['playerImage'].read()
+        player = Player(player_image=playerImage, player_fname=result['player_first_name'], 
+                        player_lname=result['player_last_name'], team_id=result['team_selected'])
         db.session.add(player)
         db.session.commit()
         teams = get_team()
@@ -96,6 +99,9 @@ def player_information():
 
 def get_team():
     teams = Team.query.all()
+    for each in teams:
+        if each.team_image is not None:
+            each.team_image = b64encode(each.team_image)
     return teams
 
 
@@ -103,6 +109,8 @@ def get_team():
 def team_edit(team_id):
     if request.method == 'GET':
         team = Team.query.filter_by(team_id=team_id).one()
+        if team.team_image is not None:
+            team.team_image = b64encode(team.team_image)
         return render_template('edit_team.html', team=team)
 
 
@@ -110,8 +118,10 @@ def team_edit(team_id):
 def updateteam():
     if request.method == 'POST':
         result = request.form
-        team = Team.query.filter_by(team_id=result.get('team_id')).one()
+        teamImage = request.files['teamImage'].read()
+        team = Team.query.filter_by(team_id=result.get('team_id'),).one()
         team.team_name = result.get('team_name')
+        team.team_image = teamImage
         db.session.commit()
         teams = get_team()
         if teams:
@@ -168,10 +178,12 @@ def player_edit(player_id):
 @app.route('/update_player', methods=['POST', 'GET'])
 def updateplayer():
     if request.method == 'POST':
+        playerImage = request.files['playerImage'].read()
         result = request.form
         player = Player.query.filter_by(player_id=result.get('player_id')).one()
         player.player_fname = result.get('player_fname')
         player.player_lname = result.get('player_lname')
+        player.player_image = playerImage
         player.team_id = result.get('team_selected')
         db.session.commit()
         return getAllPlayers()
