@@ -16,69 +16,6 @@ class Team(db.Model):
     __tablename__ = 'Team' 
     team_id = db.Column(db.Integer, primary_key=True)
     team_name = db.Column(db.String(80))
-    team_image = db.Column(db.String(120))
-
-    def __repr__(self):
-        return "<Team(team_name='%s', team_id='%s)>" % (
-                                self.team_name, self.team_id)
-
-
-class Player(db.Model):
-    """docstring for Player"""
-    __tablename__ = 'Player'
-    player_id = db.Column(db.Integer, primary_key=True)
-    player_fname = db.Column(db.String(80))
-    player_lname = db.Column(db.String(80))
-    team_id = db.Column(db.Integer, db.ForeignKey('Team.team_id'))
-
-    def __repr__(self):
-        return "<Team(player_name='%s', player_id='%s, team_id='%s)>" % (
-                                self.player_name, self.player_id, self.team_id)
-        
-@app.route('/')
-def home():
-    return render_template('login.html')
-
-
-@app.route('/detail', methods=['POST'])
-def do_admin_login():
-    if request.form['password'] == 'admin' and request.form['username'] == 'admin':
-        teams = get_team()
-        if teams:
-class Team(db.Model):
-    __tablename__ = 'Team' 
-    team_id = db.Column(db.Integer, primary_key=True)
-    team_name = db.Column(db.String(80))
-    team_image = db.Column(db.BLOB)
-
-    def __repr__(self):
-        return "<Team(team_name='%s', team_id='%s, team_image='%s')>" % (
-                                self.team_name, self.team_id, self.team_image)
-
-
-class Player(db.Model):
-    """docstring for Player"""
-    __tablename__ = 'Player'
-    player_id = db.Column(db.Integer, primary_key=True)
-    player_fname = db.Column(db.String(80))
-    player_lname = db.Column(db.String(80))
-    player_image = db.Column(db.BLOB)
-    team_id = db.Column(db.Integer, db.ForeignKey('Team.team_id'))
-
-    def __repr__(self):
-        return "<Player(player_fname='%s', player_id='%s, team_id='%s, player_image='%s')>" % (
-                                self.player_fname, self.player_id, self.team_id, self.player_image)
-        
-@app.route('/')
-def home():
-    return render_template('login.html')
-
-
-@app.route('/login', methods=['POST'])
-class Team(db.Model):
-    __tablename__ = 'Team' 
-    team_id = db.Column(db.Integer, primary_key=True)
-    team_name = db.Column(db.String(80))
     team_image = db.Column(db.BLOB)
 
     def __repr__(self):
