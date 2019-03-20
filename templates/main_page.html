@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mystyle.css') }}">
+</head>
+<body>
+<div class="container">
+  {% block body %}
+{% if session['logged_in'] %}
+<form action="http://localhost:5000/logout" align="right" name="form1">
+  <label class="logoutLblPos">
+  <button type="submit" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-log-out"></span> Log out
+           </button>
+  </label>
+</form>
+<div class="container">{% block content %}{% endblock %}</div>
+ 
+{% else %}
+<h2>Admin Login Page </h2>
+<form action="http://localhost:5000/login" method="POST">
+    <div class="row">
+      <div class="col">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Login">
+        <span class="psw">Forgot <a href="#">password?</a></span>
+      </div>    
+    </div>
+  </form>
+  {% endif %}
+{% endblock %}
+  
+</div>
+</body>
+</html>
