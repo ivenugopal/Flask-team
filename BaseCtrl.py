@@ -194,6 +194,8 @@ def updateplayer():
         player.player_fname = result.get('player_fname')
         player.player_lname = result.get('player_lname')
         player.team_id = result.get('team_selected')
+        if request.files:
+            player.player_image = request.files['playerImage'].read()
         db.session.commit()
         return getAllPlayers()
 
