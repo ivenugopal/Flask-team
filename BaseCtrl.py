@@ -2,6 +2,8 @@ from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for
 import os
 # from collections import defaultdict, setdefault
+from base64 import b64encode
+
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm.exc import NoResultFound
 
