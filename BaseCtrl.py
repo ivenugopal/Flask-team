@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm.exc import NoResultFound
 
 import pymysql
-app = Flask(__name__)
+app=Flask(__name__,template_folder='templates')
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Venu0p@l@localhost/TeamPlayer'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Venug0p@l@localhost:3306/TeamPlayer'
