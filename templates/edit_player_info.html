@@ -135,7 +135,7 @@ input[type=submit]:hover {
         <input type="text" name="player_fname" placeholder="Player Name" value={{results.player.player_fname}}>
         <input type="text" name="player_lname" placeholder="Player Name" value={{results.player.player_lname}}>
         <div class="input-group">
-        <span class="input-group-addon">Please select</span>
+        <span class="input-group-addon">Please select to change team</span>
             <select name="team_selected" class="styled-select slate">
               {% for each in results.teams %}
               <option value="{{each.team_id }}" {% if each.team_id==results.player.team_id %} selected="selected"{% endif %}>{{ each.team_name }}</option>
@@ -145,11 +145,11 @@ input[type=submit]:hover {
            <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-btn">
-                        <img src="data:;base64,{{ each.player_image }}"/>
+                        <img src="data:;base64,{{ results.player.player_image }}"/>
                     </span>
                 </div>
-
             </div>
+            
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-btn">
@@ -164,6 +164,5 @@ input[type=submit]:hover {
     </div>
   </form>
 </div>
-
 </body>
 </html>
