@@ -24,7 +24,6 @@ class Team(db.Model):
         return "<Team(team_name='%s', team_id='%s, team_image='%s')>" % (
                                 self.team_name, self.team_id, self.team_image)
 
-
 class Player(db.Model):
     """docstring for Player"""
     __tablename__ = 'Player'
@@ -37,87 +36,7 @@ class Player(db.Model):
     def __repr__(self):
         return "<Player(player_fname='%s', player_lname='%s', player_id='%s, team_id='%s, player_image='%s')>" % (
                                 self.player_fname, self.player_lname, self.player_id, self.team_id, self.player_image)
-        
-@app.route('/')
-def home():
-    return render_template('login.html')
 
-
-@app.route('/login', methods=['POST'])
-def do_admin_login():
-    if request.form['password'] == 'admin' and request.form['username'] == 'admin':
-        teams = get_team()
-        if teams:
-            return render_template('team-players.html', teams=teams)
-        else:
-            return render_template('team-players.html')
-    else:
-        flash('Invalid username or password. Please try again!')
-        return render_template('login.html')
-
-
-@app.route('/teamplayer', methods=['POST'])
-def add_team_player():
-    if request.form['add_template'] == 'Add Team':
-        return render_template('addteam.html')
-    elif request.form['add_template'] == 'Add Player':
-        teams = get_team()
-        return render_template('addplayer.html', teams=teams)
-    else:
-        return getAllPlayers()
-
-@app.route('/addteam', methods=['POST', 'GET'])
-def add_team():
-    if request.method == 'POST':
-        result = request.form
-        teamImage = request.files['teamImage'].read()
-        team = Team.query.filter_by(team_name=result['team_name']).first()
-        if not team:
-            team1 = Team(team_name=result['team_name'], team_image=teamImage)
-            db.session.add(team1)
-            db.session.commit()
-            flash(result['team_name'] + ' is added successfully')
-            teams = get_team()
-            return render_template('team-players.html', teams=teams)
-        else:
-            flash(result['team_name'] + ' is already present')
-            return render_template('addteam.html')
-
-
-@app.route('/player_information', methods = ['POST', 'GET'])
-def player_information():
-    if request.method == 'POST':
-        result = request.form
-        if request.files:
-            playerImage = request.files['playerImage'].read()
-        else:
-            playerImage = None
-        player = Player(player_image=playerImage, player_fname=result['player_first_name'], 
-                        player_lname=result['player_last_name'], team_id=result['team_selected'])
-class Team(db.Model):
-    __tablename__ = 'Team' 
-    team_id = db.Column(db.Integer, primary_key=True)
-    team_name = db.Column(db.String(80))
-    team_image = db.Column(db.BLOB)
-
-    def __repr__(self):
-        return "<Team(team_name='%s', team_id='%s, team_image='%s')>" % (
-                                self.team_name, self.team_id, self.team_image)
-
-
-class Player(db.Model):
-    """docstring for Player"""
-    __tablename__ = 'Player'
-    player_id = db.Column(db.Integer, primary_key=True)
-    player_fname = db.Column(db.String(80))
-    player_lname = db.Column(db.String(80))
-    player_image = db.Column(db.BLOB)
-    team_id = db.Column(db.Integer, db.ForeignKey('Team.team_id'))
-
-    def __repr__(self):
-        return "<Player(player_fname='%s', player_lname='%s', player_id='%s, team_id='%s, player_image='%s')>" % (
-                                self.player_fname, self.player_lname, self.player_id, self.team_id, self.player_image)
-        
 @app.route('/')
 def home():
     return render_template('main_page.html')
